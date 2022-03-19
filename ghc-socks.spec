@@ -6,7 +6,7 @@
 Summary:	Socks proxy (ver 5)
 Name:		ghc-%{pkgname}
 Version:	0.6.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/socks
