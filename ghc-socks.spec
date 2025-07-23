@@ -4,6 +4,7 @@
 #
 %define		pkgname	socks
 Summary:	Socks proxy (ver 5)
+Summary(pl.UTF-8):	Proxy Socks (wersja 5)
 Name:		ghc-%{pkgname}
 Version:	0.6.1
 Release:	2
@@ -14,21 +15,28 @@ Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{v
 # Source0-md5:	e85be2113ecf285060ce2c3678bcd9dc
 URL:		http://hackage.haskell.org/package/socks
 BuildRequires:	ghc >= 6.12.3
+BuildRequires:	ghc-base >= 3
+BuildRequires:	ghc-base < 5
 BuildRequires:	ghc-basement
+BuildRequires:	ghc-bytestring
 BuildRequires:	ghc-cereal >= 0.3.1
 BuildRequires:	ghc-network >= 2.6
 %if %{with prof}
 BuildRequires:	ghc-prof
+BuildRequires:	ghc-base-prof >= 3
 BuildRequires:	ghc-basement-prof
+BuildRequires:	ghc-bytestring-prof
 BuildRequires:	ghc-cereal-prof >= 0.3.1
 BuildRequires:	ghc-network-prof >= 2.6
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
-Requires:	ghc-basement
-Requires:	ghc-cereal >= 0.3.1
-Requires:	ghc-network >= 2.6
+BuildRequires:	ghc-base >= 3
+BuildRequires:	ghc-basement
+BuildRequires:	ghc-bytestring
+BuildRequires:	ghc-cereal >= 0.3.1
+BuildRequires:	ghc-network >= 2.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -40,18 +48,23 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Socks proxy (version 5) implementation.
 
+%description -l pl.UTF-8
+Implementacja proxy socks (w wersji 5).
+
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-base-prof >= 3
 Requires:	ghc-basement-prof
+Requires:	ghc-bytestring-prof
 Requires:	ghc-cereal-prof >= 0.3.1
 Requires:	ghc-network-prof >= 2.6
 
 %description prof
-Profiling %{pkgname} library for GHC.  Should be installed when
-GHC's profiling subsystem is needed.
+Profiling %{pkgname} library for GHC. Should be installed when GHC's
+profiling subsystem is needed.
 
 %description prof -l pl.UTF-8
 Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
@@ -69,6 +82,7 @@ runhaskell Setup.hs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.hs build
+
 runhaskell Setup.hs haddock --executables
 
 %install
@@ -99,7 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
